@@ -1,0 +1,76 @@
+---
+- name: remi's repository present
+  package:
+    name: "{{ url_to_remis_repo }}"
+    state: present
+- name: mariadb's repository present
+  yum_repository:
+    name: mariadb
+    description: MariaDB
+    baseurl: http://yum.mariadb.org/10.2/centos7-amd64
+    gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+    gpgcheck: yes
+- name: latest php and php needed libraries installed
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - "{{ php_packages }}"
+  notify: restart php72-php-fpm
+  tags: update
+- name: updated /etc/opt/remi/php72/php-fpm.d/www.conf
+  template:
+    src: templates/php72-www.conf
+    dest: /etc/opt/remi/php72/php-fpm.d/www.conf
+  notify: restart php72-php-fpm
+- name: nginx's repository present
+  yum_repository:
+    name: nginx
+    description: nginx
+    baseurl: http://nginx.org/packages/mainline/centos/7/$basearch/
+    gpgkey: http://nginx.org/keys/nginx_signing.key
+    gpgcheck: yes
+- name: latest nginx installed
+  yum:
+    name: nginx
+    state: latest
+  notify: restart nginx
+  tags: update
+- name: http(s) firewall rules enabled
+  firewalld:
+    service: "{{ item }}"
+    permanent: true
+    state: enabled
+    immediate: true
+  with_items:
+    - http
+    - https
+- name: selinux packages installed
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ selinux_packages }}"
+  tags: update
+- name: www target directory created
+  file:
+    path: /var/www/
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+- name: selinux policies set on www
+  sefcontext:
+    target: '/var/www(/.*)?'
+    setype: httpd_sys_content_t
+    state: present
+- name: http context remote connections with db possible
+  seboolean:
+    name: httpd_can_network_connect_db
+    state: yes
+    persistent: yes
+- name: nginx enabled and started
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+...
