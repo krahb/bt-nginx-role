@@ -10,19 +10,44 @@
     baseurl: http://yum.mariadb.org/10.2/centos7-amd64
     gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
     gpgcheck: yes
-- name: latest php and php needed libraries installed
+- name: latest misc pacakes installed
   yum:
     name: "{{ item }}"
     state: latest
   with_items:
-    - "{{ php_packages }}"
-  notify: restart php72-php-fpm
+    - "{{ misc_packages }}"
+#  notify: restart php-fpm
   tags: update
-- name: updated /etc/opt/remi/php72/php-fpm.d/www.conf
+- name: latest php and php needed libraries installed
+  yum:
+    name: "{{ item }}"
+    state: latest
+    enablerepo: remi-php72
+  with_items:
+    - "{{ php_packages }}"
+  notify: restart php-fpm
+  tags: update
+- name: updated /etc/php-fpm.d/www.conf
   template:
-    src: templates/php72-www.conf
-    dest: /etc/opt/remi/php72/php-fpm.d/www.conf
-  notify: restart php72-php-fpm
+    src: templates/www.conf
+    dest: /etc/php-fpm.d/www.conf
+  notify: restart php-fpm
+- name: flush handlers
+  meta: flush_handlers
+- name: php-fpm service enabled and started
+  service:
+    name: php-fpm
+    state: started
+    enabled: yes
+- name: nginx group on /var/lib/php/
+  shell: chgrp nginx /var/lib/php/*
+  args:
+    warn: False
+- name: permissions on /var/lib/php/
+  shell: chmod 2770 /var/lib/php/*
+  args:
+    warn: False
+
 - name: nginx's repository present
   yum_repository:
     name: nginx

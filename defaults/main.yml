@@ -1,15 +1,23 @@
 ---
 url_to_remis_repo: https://rpms.remirepo.net/enterprise/remi-release-7.rpm
-php_packages:
-- php72-php
-- php72-php-common
-- php72-php-mysql
-- php72-php-gd
-- php72-php-xml
-- php72-php-fpm
-- php72-php-mbstring
+misc_packages:
 - MariaDB-client
 - MySQL-python
+php_packages:
+- php
+- php-common
+- php-mysql
+- php-gd
+- php-xml
+- php-fpm
+- php-mbstring
+#- php72-php
+#- php72-php-common
+#- php72-php-mysql
+#- php72-php-gd
+#- php72-php-xml
+#- php72-php-fpm
+#- php72-php-mbstring
 selinux_packages:
 - libselinux-python
 - policycoreutils-python

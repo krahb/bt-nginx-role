@@ -3,8 +3,8 @@
   service:
     name: nginx
     state: restarted
-- name: restart php72-php-fpm
+- name: restart php-fpm
   service:
-    name: php72-php-fpm
+    name: php-fpm
     state: restarted
 ...
