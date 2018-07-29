@@ -1,5 +1,6 @@
 ---
 url_to_remis_repo: https://rpms.remirepo.net/enterprise/remi-release-7.rpm
+mysql_version: 10.3
 misc_packages:
 - MariaDB-client
 - MySQL-python
