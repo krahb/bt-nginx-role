@@ -12,19 +12,15 @@
     gpgcheck: yes
 - name: latest misc pacakes installed
   yum:
-    name: "{{ item }}"
+    name: "{{ misc_packages }}"
     state: latest
-  with_items:
-    - "{{ misc_packages }}"
 #  notify: restart php-fpm
   tags: update
 - name: latest php and php needed libraries installed
   yum:
-    name: "{{ item }}"
+    name: "{{ php_packages }}"
     state: latest
     enablerepo: remi-php72
-  with_items:
-    - "{{ php_packages }}"
   notify: restart php-fpm
   tags: update
 - name: updated /etc/php-fpm.d/www.conf
@@ -72,9 +68,8 @@
     - https
 - name: selinux packages installed
   yum:
-    name: "{{ item }}"
+    name: "{{ selinux_packages }}"
     state: latest
-  with_items: "{{ selinux_packages }}"
   tags: update
 - name: www target directory created
   file:
