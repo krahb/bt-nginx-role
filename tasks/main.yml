@@ -28,6 +28,20 @@
     src: templates/www.conf
     dest: /etc/php-fpm.d/www.conf
   notify: restart php-fpm
+- name: nginx's repository present
+  yum_repository:
+    name: nginx
+    description: nginx
+    baseurl: http://nginx.org/packages/mainline/centos/7/$basearch/
+    gpgkey: http://nginx.org/keys/nginx_signing.key
+    gpgcheck: yes
+- name: latest nginx installed
+  yum:
+    name: nginx
+    state: latest
+  notify: restart nginx
+  tags: update
+
 - name: flush handlers
   meta: flush_handlers
 - name: php-fpm service enabled and started
@@ -44,19 +58,6 @@
   args:
     warn: False
 
-- name: nginx's repository present
-  yum_repository:
-    name: nginx
-    description: nginx
-    baseurl: http://nginx.org/packages/mainline/centos/7/$basearch/
-    gpgkey: http://nginx.org/keys/nginx_signing.key
-    gpgcheck: yes
-- name: latest nginx installed
-  yum:
-    name: nginx
-    state: latest
-  notify: restart nginx
-  tags: update
 - name: http(s) firewall rules enabled
   firewalld:
     service: "{{ item }}"
