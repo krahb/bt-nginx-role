@@ -10,7 +10,7 @@
     baseurl: "http://yum.mariadb.org/{{ mysql_version }}/centos7-amd64"
     gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
     gpgcheck: yes
-- name: latest misc pacakes installed
+- name: latest misc packages installed
   yum:
     name: "{{ misc_packages }}"
     state: latest
