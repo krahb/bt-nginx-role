@@ -35,9 +35,9 @@
     baseurl: http://nginx.org/packages/mainline/centos/7/$basearch/
     gpgkey: http://nginx.org/keys/nginx_signing.key
     gpgcheck: yes
-- name: latest nginx installed
+- name: latest nginx packages installed
   yum:
-    name: nginx
+    name: "{{ nginx_packages }}"
     state: latest
   notify: restart nginx
   tags: update

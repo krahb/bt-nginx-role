@@ -12,14 +12,10 @@ php_packages:
 - php-xml
 - php-fpm
 - php-mbstring
-#- php72-php
-#- php72-php-common
-#- php72-php-mysql
-#- php72-php-gd
-#- php72-php-xml
-#- php72-php-fpm
-#- php72-php-mbstring
 selinux_packages:
 - libselinux-python
 - policycoreutils-python
+nginx_packages:
+- nginx
+- python2-certbot-nginx
 ...
