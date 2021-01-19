@@ -2,21 +2,24 @@
 url_to_remis_repo: https://rpms.remirepo.net/enterprise/remi-release-7.rpm
 mysql_version: 10.3
 misc_packages:
-- MariaDB-client
-- MySQL-python
-- goaccess
+- mysql
+- python3-PyMySQL
+  #- goaccess
 php_packages:
 - php
 - php-common
-- php-mysql
+- php-mysqlnd
 - php-gd
 - php-xml
 - php-fpm
+- php-json
 - php-mbstring
-selinux_packages:
+selinux_packages_7:
 - libselinux-python
 - policycoreutils-python
+selinux_packages_8:
+- libsemanage-python3
 nginx_packages:
 - nginx
-- python2-certbot-nginx
+- python3-certbot-nginx
 ...

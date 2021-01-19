@@ -1,15 +1,15 @@
 ---
-- name: remi's repository present
-  package:
-    name: "{{ url_to_remis_repo }}"
-    state: present
-- name: mariadb's repository present
-  yum_repository:
-    name: mariadb
-    description: MariaDB
-    baseurl: "http://yum.mariadb.org/{{ mysql_version }}/centos7-amd64"
-    gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-    gpgcheck: yes
+#- name: remi's repository present
+#  package:
+#    name: "{{ url_to_remis_repo }}"
+#    state: present
+#- name: mariadb's repository present
+#  yum_repository:
+#    name: mariadb
+#    description: MariaDB
+#    baseurl: "http://yum.mariadb.org/{{ mysql_version }}/centos7-amd64"
+#    gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+#    gpgcheck: yes
 - name: latest misc packages installed
   yum:
     name: "{{ misc_packages }}"
@@ -67,11 +67,16 @@
   with_items:
     - http
     - https
-- name: selinux packages installed
+- name: required packages installed
   yum:
-    name: "{{ selinux_packages }}"
-    state: latest
-  tags: update
+    name: "{{ selinux_packages_7 }}"
+    state: present
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version|int < 8
+- name: required packages installed
+  yum:
+    name: "{{ selinux_packages_8 }}"
+    state: present
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version|int >= 8
 - name: www target directory created
   file:
     path: /var/www/
